@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   backend:
-    image: amazingtech-backend
+    # image: amazingtech-backend
+    build: ./backend
     restart: always
     ports:
       - "3033:3033"
@@ -11,7 +12,8 @@ services:
     # links:
     #   - redis
   frontend:
-    image: amazingtech-frontend
+    # image: amazingtech-frontend
+    build: ./tokenize
     restart: always
     ports:
       - "3000:3000"
