@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
   }, 500)
 
   socket.on("disconnecting", (reason) => {
-    console.log('disconnecting')
+    // KEEP EMPTY
   })
 
   socket.on("disconnect", (reason) => {

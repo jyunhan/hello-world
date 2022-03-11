@@ -27,8 +27,11 @@ const Th = styled.div`
 `
 
 const UpdateDateTimeRow = styled(Row)`
+  display: flex;
   border: 1px solid #d6d1d1;
   height: 2em;
+  align-items: center;
+  justify-content: center;
 `
 
 const Board = styled(Th)`
@@ -44,7 +47,10 @@ const Board = styled(Th)`
 
 const BoardList = styled.div`
   width: 95%;
-  height: 30px;
+`
+
+const BoardTitleList = styled(BoardList)`
+  height: 50px;
   display: flex;
   align-items: center;
 `
@@ -71,12 +77,26 @@ const RightBoard = styled(Board)`
   border-bottom-left-radius: 5px;
 `
 
+const InnerRow = styled.div`
+  height: 2em;
+  flex-flow: row;
+  display: flex;
+  width: 100%;
+`
+
+const ValueColumn = styled.div`
+  width: 100%;
+  font-size: 12px;
+  text-align: right;
+  color: #a39090;
+`
+
 const BoardTitle = ({data: {position}}) => {
   return (
-    <BoardList>
+    <BoardTitleList>
       <LeftColumn> { position === 'left' ? 'Size' : 'Ask' } </LeftColumn>
       <RightColumn> { position === 'left' ? 'Bid' : 'Size' } </RightColumn>
-    </BoardList>
+    </BoardTitleList>
   )
 }
 
@@ -84,10 +104,18 @@ const ListRow = ({data: { type, list }}) => {
   return list.map((data, idx) => {
     const price = data[0]
     const size = data[1]
+    const value = data[2]
     return (
       <BoardList key={idx}>
-        <LeftColumn> { type === 'bid' ? size : price } </LeftColumn>
-        <RightColumn> { type === 'bid' ? price : size } </RightColumn>
+        <InnerRow>
+          <LeftColumn> { type === 'bid' ? size : price } </LeftColumn>
+          <RightColumn> { type === 'bid' ? price : size } </RightColumn>
+        </InnerRow>
+        <InnerRow>
+          <ValueColumn>
+            { value }
+          </ValueColumn>
+        </InnerRow>
       </BoardList>
     )
   })
@@ -96,7 +124,9 @@ const ListRow = ({data: { type, list }}) => {
 export default ({ bidList, askList }) => {
   return (
     <BoardWrapper>
-      <UpdateDateTimeRow/>
+      <UpdateDateTimeRow>
+        Tokenize AmazinTech.
+      </UpdateDateTimeRow>
       <Row>
         <LeftBoard>
           <BoardTitle data={{position: 'left'}} />
