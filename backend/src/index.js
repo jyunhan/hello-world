@@ -22,6 +22,7 @@ const server = app.listen(3033, () => {
 })
 
 const io = require("socket.io")(server, {
+  // reconnection: false,
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
@@ -29,15 +30,24 @@ const io = require("socket.io")(server, {
 })
 
 io.on('connection', (socket) => {
-  // socket.emit('hello', 'test')
-  setInterval(async () => {
+  const theInterval = setInterval(async () => {
     const { data } = await axios({
       method: 'GET',
       url: 'https://api.binance.com/api/v3/depth?symbol=ETHBTC&limit=1',
     })
 
+    console.log(new Date().toISOString())
     socket.emit('hello', JSON.stringify(data))
   }, 2500)
+
+  socket.on("disconnecting", (reason) => {
+    console.log('disconnecting')
+  })
+
+  socket.on("disconnect", (reason) => {
+    socket.disconnect()
+    clearInterval(theInterval)
+  })
 
   socket.on('howdy', (arg) => {
     console.log(arg)

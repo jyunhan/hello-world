@@ -21,9 +21,9 @@ const mapDispatchToProps = dispatch => {
     updateBidList: bidList => {
       return dispatch(updateBidList(bidList))
     },
-    // updateAskList: askList => {
-    //   return dispatch(updateAskList(askList))
-    // }
+    updateAskList: askList => {
+      return dispatch(updateAskList(askList))
+    }
   }
 }
 
@@ -33,22 +33,32 @@ function Home (state) {
 
   // TODO: modulize socket-client establishment
   useEffect(() => {
-    if (isSocketIoSet && socketIo) {
+    if (isSocketIoSet || socketIo) {
       socketIo.on('hello', (request) => {
         const { bids, asks, updateId } = JSON.parse(request)
         state.updateBidList(bids)
-        // state.updateAskList(asks)
+        state.updateAskList(asks)
       })
     }
     else {
-      setSocketIo(io('ws://localhost:3033', { transports: ["websocket"] }))
+      const socket = io('ws://localhost:3033', { transports: ["websocket"] })
+      setSocketIo(socket)
+
+      socket.on("connect", () => {
+        console.log('socketIo ID: ' + socket.id)
+      });
+
+      socket.on("disconnect", () => {
+        console.log(socket.connected); // false
+      });
+
       setIsSocketIoSet(true)
     }
   }, [isSocketIoSet])
 
   return !isSocketIoSet ? null : (
     <Container>
-      <BoardWrapper bidList={state.bidList} />
+      <BoardWrapper bidList={state.bidList} askList={state.askList} />
     </Container>
   )
 }

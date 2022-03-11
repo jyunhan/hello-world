@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import depth from '../mock_data/depth.json'
+import axios from 'axios'
 
 const BoardWrapper = styled.div`
   max-width: 1024px;
@@ -49,41 +49,30 @@ const BoardList = styled.div`
   align-items: center;
 `
 
-const SizeColumn = styled.div`
+const LeftColumn = styled.div`
   flex: 1;
-
 `
 
-const AmountColumn = styled.div`
+const RightColumn = styled.div`
   flex: 1;
   text-align: right;
   padding-right: 2px;
 `
 
 const ListRow = ({ data: { type, list } }) => {
-  let mockData = type === 'ask' ? [
-    ['0.1234', '0.9876'],
-    ['QAQ', 'zzzz'],
-    ['QAQ', 'zzzz'],
-    ['QAQ', 'zzzz'],
-    ['QAQ', 'zzzz'],
-  ] : list
-
-  return mockData.map((data, idx) => {
+  return list.map((data, idx) => {
+    const price = data[0]
+    const amount = data[1]
     return (
       <BoardList key={idx}>
-        <SizeColumn>
-          ${data[0]}
-        </SizeColumn>
-        <AmountColumn>
-        ${data[1]}
-        </AmountColumn>
+        <LeftColumn> { type === 'bid' ? amount : price } </LeftColumn>
+        <RightColumn> { type === 'bid' ? price : amount } </RightColumn>
       </BoardList>
     )
   })
 }
 
-export default ({ bidList, askList = [] }) => {
+export default ({ bidList, askList }) => {
   return (
     <BoardWrapper>
       <UpdateDateTimeRow/>

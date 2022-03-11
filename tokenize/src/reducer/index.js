@@ -9,9 +9,10 @@ const homeReducer = (state = initState, action) => {
       return Object.assign({}, state, {
         bidList: action.data.bidList
       })
-    // case 'UPDATE_ASKLIST':
-    //   console.log(state)
-    //   return action.askList
+    case 'UPDATE_ASKLIST':
+      return Object.assign({}, state, {
+        askList: action.data.askList
+      })
     default:
       return state;
   }
