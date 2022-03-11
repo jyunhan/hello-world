@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  backend:
+    image: amazingtech-backend
+    restart: always
+    ports:
+      - "3033:3033"
+    # volumes:
+    #   - .:/code
+    #   - logvolume01:/var/log
+    # links:
+    #   - redis
+  frontend:
+    image: amazingtech-frontend
+    restart: always
+    ports:
+      - "3000:3000"
