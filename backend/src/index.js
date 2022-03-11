@@ -14,12 +14,6 @@ app.get('/', (req, res) => {
   res.send('ok')
 })
 
-app.get('/pub', (req, res) => {
-  const randomNumber = Math.floor(Math.random()*10)
-  socket.emit('hello', `world ${randomNumber}`)
-  console.log('hello', `world ${randomNumber}`)
-})
-
 const server = app.listen(3033, () => {
   console.log('server start...')
 })
