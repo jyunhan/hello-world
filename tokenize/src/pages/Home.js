@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
 import { connect } from 'react-redux'
 import BoardWrapper from '../component/BorderWrapper'
-import { updateBidList } from '../actions'
+import { updateBidList, updateAskList } from '../actions'
 
 const Container = styled.div`
   height: 100vh;
@@ -11,7 +11,8 @@ const Container = styled.div`
 
 const mapStateToProps = state => {
   return ({
-    bidList: state.bidList
+    bidList: state.bidList,
+    askList: state.askList,
   })
 }
 
@@ -20,6 +21,9 @@ const mapDispatchToProps = dispatch => {
     updateBidList: bidList => {
       return dispatch(updateBidList(bidList))
     },
+    // updateAskList: askList => {
+    //   return dispatch(updateAskList(askList))
+    // }
   }
 }
 
@@ -33,6 +37,7 @@ function Home (state) {
       socketIo.on('hello', (request) => {
         const { bids, asks, updateId } = JSON.parse(request)
         state.updateBidList(bids)
+        // state.updateAskList(asks)
       })
     }
     else {

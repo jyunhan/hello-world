@@ -1,14 +1,20 @@
 const initState = {
   bidList: [],
+  askList: [],
 }
 
-const todoReducer = (state = initState, action) => {
+const homeReducer = (state = initState, action) => {
   switch (action.type) {
-    case 'UPDATE':
-      return action.bidList
+    case 'UPDATE_BIDLIST':
+      return Object.assign({}, state, {
+        bidList: action.data.bidList
+      })
+    // case 'UPDATE_ASKLIST':
+    //   console.log(state)
+    //   return action.askList
     default:
       return state;
   }
 }
 
-export default todoReducer
+export default homeReducer

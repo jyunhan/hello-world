@@ -33,11 +33,11 @@ io.on('connection', (socket) => {
   setInterval(async () => {
     const { data } = await axios({
       method: 'GET',
-      url: 'https://api.binance.com/api/v3/depth?symbol=ETHBTC&limit=2',
+      url: 'https://api.binance.com/api/v3/depth?symbol=ETHBTC&limit=1',
     })
-  
+
     socket.emit('hello', JSON.stringify(data))
-  }, 5000)
+  }, 2500)
 
   socket.on('howdy', (arg) => {
     console.log(arg)
