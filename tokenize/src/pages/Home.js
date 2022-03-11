@@ -1,7 +1,9 @@
-import BoardWrapper from '../component/BorderWrapper'
 import styled from 'styled-components'
 import React, { useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
+import { connect } from 'react-redux'
+import BoardWrapper from '../component/BorderWrapper'
+import { updateBidList } from '../actions'
 
 // Create a <Wrapper> react component that renders a <section> with
 // some padding and a papayawhip background
@@ -10,30 +12,27 @@ const Container = styled.div`
   height: 100vh;
 `
 
-function Home () {
+function Home (state) {
   const [isSocketIoSet, setIsSocketIoSet] = useState(false)
   const [socketIo, setSocketIo] = useState(undefined)
-  const [bidList, setBidList] = useState([])
 
   // TODO: modulize socket-client establishment
   useEffect(() => {
     if (isSocketIoSet && socketIo) {
-      socketIo.on('hello', (bidList) => {
-        setBidList(bidList)
+      socketIo.on('hello', (request) => {
+        const { bids, asks, updateId } = JSON.parse(request)
+        state.updateBidList(bids)
       })
     }
     else {
       setSocketIo(io('ws://localhost:3033', { transports: ["websocket"] }))
       setIsSocketIoSet(true)
     }
-    // socket.emit('howdy', 'stranger')
   }, [isSocketIoSet])
 
   useEffect(() => {
-    if (bidList.length > 0) {
-      console.log(bidList + new Date().toISOString())
-    }
-  }, [bidList])
+    console.log(state.bidList)
+  }, [state.bidList])
 
   return !isSocketIoSet ? null : (
     <Container>
@@ -42,4 +41,22 @@ function Home () {
   )
 }
 
-export default Home
+const mapStateToProps = state => {
+  return ({
+    bidList: state.bidList
+  })
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateBidList: bidList => {
+      return dispatch(updateBidList(bidList))
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home)
+

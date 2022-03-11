@@ -1,9 +1,11 @@
 const initState = {
-  bidList: ['0.33333', '0.05298'],
+  bidList: [],
 }
 
 const todoReducer = (state = initState, action) => {
   switch (action.type) {
+    case 'UPDATE':
+      return action.bidList
     default:
       return state;
   }
