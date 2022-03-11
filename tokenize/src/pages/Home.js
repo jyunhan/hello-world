@@ -5,10 +5,6 @@ import { connect } from 'react-redux'
 import BoardWrapper from '../component/BorderWrapper'
 import { updateBidList, updateAskList } from '../actions'
 
-const Container = styled.div`
-  height: 100vh;
-`
-
 const mapStateToProps = state => {
   return ({
     bidList: state.bidList,
@@ -43,24 +39,11 @@ function Home (state) {
     else {
       const socket = io('ws://localhost:3033', { transports: ["websocket"] })
       setSocketIo(socket)
-
-      socket.on("connect", () => {
-        console.log('socketIo ID: ' + socket.id)
-      });
-
-      socket.on("disconnect", () => {
-        console.log(socket.connected); // false
-      });
-
       setIsSocketIoSet(true)
     }
   }, [isSocketIoSet])
 
-  return !isSocketIoSet ? null : (
-    <Container>
-      <BoardWrapper bidList={state.bidList} askList={state.askList} />
-    </Container>
-  )
+  return !isSocketIoSet ? null : <BoardWrapper bidList={state.bidList} askList={state.askList} />
 }
 
 export default connect(

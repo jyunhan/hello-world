@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 
 const BoardWrapper = styled.div`
-  max-width: 1024px;
+  max-width: 800px;
   min-width: 22em;
   display: flex;
   flex-flow: column nowrap;  
@@ -34,12 +33,13 @@ const UpdateDateTimeRow = styled(Row)`
 
 const Board = styled(Th)`
   flex: 1;
-  border: 1px solid darkgray;
-  min-height: 200px;
+  border: 1px solid #d6d1d1;
+  min-height: 400px;
   margin: 0px 2rem;
   margin-top: 1rem;
   justify-content: start;
   flex-direction: column;
+  background: #eef7ee;
 `
 
 const BoardList = styled.div`
@@ -59,14 +59,35 @@ const RightColumn = styled.div`
   padding-right: 2px;
 `
 
-const ListRow = ({ data: { type, list } }) => {
+const LeftBoard = styled(Board)`
+  border-left: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+`
+
+const RightBoard = styled(Board)`
+  border-right: 0px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+`
+
+const BoardTitle = ({data: {position}}) => {
+  return (
+    <BoardList>
+      <LeftColumn> { position === 'left' ? 'Size' : 'Ask' } </LeftColumn>
+      <RightColumn> { position === 'left' ? 'Bid' : 'Size' } </RightColumn>
+    </BoardList>
+  )
+}
+
+const ListRow = ({data: { type, list }}) => {
   return list.map((data, idx) => {
     const price = data[0]
-    const amount = data[1]
+    const size = data[1]
     return (
       <BoardList key={idx}>
-        <LeftColumn> { type === 'bid' ? amount : price } </LeftColumn>
-        <RightColumn> { type === 'bid' ? price : amount } </RightColumn>
+        <LeftColumn> { type === 'bid' ? size : price } </LeftColumn>
+        <RightColumn> { type === 'bid' ? price : size } </RightColumn>
       </BoardList>
     )
   })
@@ -77,12 +98,14 @@ export default ({ bidList, askList }) => {
     <BoardWrapper>
       <UpdateDateTimeRow/>
       <Row>
-        <Board>
+        <LeftBoard>
+          <BoardTitle data={{position: 'left'}} />
           <ListRow data={{type: 'bid', list: bidList}} />
-        </Board>
-        <Board>
+        </LeftBoard>
+        <RightBoard>
+          <BoardTitle data={{position: 'right'}} />
           <ListRow data={{type: 'ask', list: askList}} />
-        </Board>
+        </RightBoard>
       </Row>
     </BoardWrapper>
   )
