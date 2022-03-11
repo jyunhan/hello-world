@@ -60,14 +60,14 @@ const AmountColumn = styled.div`
   padding-right: 2px;
 `
 
-const ListRow = () => {
-  let mockData = [
+const ListRow = ({ data: { type, list } }) => {
+  let mockData = type === 'ask' ? [
     ['0.1234', '0.9876'],
     ['QAQ', 'zzzz'],
     ['QAQ', 'zzzz'],
     ['QAQ', 'zzzz'],
     ['QAQ', 'zzzz'],
-  ]
+  ] : list
 
   return mockData.map((data, idx) => {
     return (
@@ -83,17 +83,16 @@ const ListRow = () => {
   })
 }
 
-export default () => {
-  const { bids, asks, lastUpdateId } = depth
+export default ({ bidList, askList = [] }) => {
   return (
     <BoardWrapper>
       <UpdateDateTimeRow/>
       <Row>
         <Board>
-          <ListRow/>
+          <ListRow data={{type: 'bid', list: bidList}} />
         </Board>
         <Board>
-          <ListRow/>
+          <ListRow data={{type: 'ask', list: askList}} />
         </Board>
       </Row>
     </BoardWrapper>

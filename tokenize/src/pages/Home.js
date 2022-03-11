@@ -5,12 +5,23 @@ import { connect } from 'react-redux'
 import BoardWrapper from '../component/BorderWrapper'
 import { updateBidList } from '../actions'
 
-// Create a <Wrapper> react component that renders a <section> with
-// some padding and a papayawhip background
-
 const Container = styled.div`
   height: 100vh;
 `
+
+const mapStateToProps = state => {
+  return ({
+    bidList: state.bidList
+  })
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateBidList: bidList => {
+      return dispatch(updateBidList(bidList))
+    },
+  }
+}
 
 function Home (state) {
   const [isSocketIoSet, setIsSocketIoSet] = useState(false)
@@ -30,29 +41,11 @@ function Home (state) {
     }
   }, [isSocketIoSet])
 
-  useEffect(() => {
-    console.log(state.bidList)
-  }, [state.bidList])
-
   return !isSocketIoSet ? null : (
     <Container>
-      <BoardWrapper/>
+      <BoardWrapper bidList={state.bidList} />
     </Container>
   )
-}
-
-const mapStateToProps = state => {
-  return ({
-    bidList: state.bidList
-  })
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    updateBidList: bidList => {
-      return dispatch(updateBidList(bidList))
-    },
-  }
 }
 
 export default connect(
